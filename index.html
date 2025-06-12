@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Título Especial ❤️</title>
+    <style>
+        /* Estilos CSS para deixar a página bonita */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(to right, #ffbebe, #ffe6f2); /* Fundo com gradiente suave */
+            color: #333;
+            text-align: center;
+            line-height: 1.6;
+            overflow: hidden; /* Evita barras de rolagem desnecessárias */
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            margin: 20px;
+            animation: fadeIn 2s ease-out; /* Animação de entrada */
+        }
+        h1 {
+            color: #d147a3; /* Um tom de rosa mais escuro */
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        p {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        .countdown-container {
+            margin-top: 25px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap; /* Permite quebrar em várias linhas se necessário */
+            justify-content: center;
+            gap: 15px; /* Espaço entre os itens */
+        }
+        .time-unit {
+            background-color: #e91e63; /* Rosa vibrante para o fundo */
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1.6em; /* Tamanho da fonte maior para os números */
+            font-weight: bold;
+            min-width: 80px; /* Largura mínima para manter alinhamento */
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .time-unit .label {
+            display: block;
+            font-size: 0.55em; /* Tamanho da fonte menor para o rótulo (ex: "dias") */
+            font-weight: normal;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+        .heart {
+            color: #e91e63;
+            font-size: 2em;
+            animation: pulse 1.5s infinite; /* Animação de pulso para o coração */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Estilo para telas menores */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 25px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            p {
+                font-size: 1.1em;
+            }
+            .time-unit {
+                font-size: 1.4em;
+                min-width: 60px;
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="heart">❤️</span>
+        <h1>MENSAGEM ESPECIAL, Com Todo Amor!</h1>
+        <p id="mensagem-especial">
+            </p>
+
+        <div class="countdown-container">
+            <div class="time-unit" id="years-unit">
+                <span id="years">00</span>
+                <span class="label">anos</span>
+            </div>
+            <div class="time-unit" id="months-unit">
+                <span id="months">00</span>
+                <span class="label">meses</span>
+            </div>
+            <div class="time-unit" id="days-unit">
+                <span id="days">00</span>
+                <span class="label">dias</span>
+            </div>
+            <div class="time-unit" id="hours-unit">
+                <span id="hours">00</span>
+                <span class="label">horas</span>
+            </div>
+            <div class="time-unit" id="minutes-unit">
+                <span id="minutes">00</span>
+                <span class="label">minutos</span>
+            </div>
+            <div class="time-unit" id="seconds-unit">
+                <span id="seconds">00</span>
+                <span class="label">segundos</span>
+            </div>
+        </div>
+
+        <p style="margin-top: 30px; font-size: 0.9em; color: #666;">
+            Com carinho, do seu amor.
+        </p>
+        <span class="heart">❤️</span>
+    </div>
+
+    <script>
+        // --- CONFIGURAÇÕES DA PÁGINA (JavaScript) ---
+
+        // A data de referência para a contagem (AAAA-MM-DD)
+        // *** MANTENHA ESTA DATA EXATAMENTE IGUAL À DO SEU CÓDIGO PYTHON (2024-09-26) ***
+        const dataReferenciaStr = "2024-09-26"; 
+
+        // Sua mensagem especial (aqui no JavaScript)
+        const suaMensagem = "Meu amor, você é a pessoa mais incrível que já conheci. Cada dia ao seu lado é um presente.";
+
+        // --- LÓGICA DE CÁLCULO E EXIBIÇÃO EM TEMPO REAL ---
+
+        // Função para formatar números com zero à esquerda (ex: 5 -> 05)
+        const formatNumber = (num) => num < 10 ? '0' + num : num;
+
+        function updateCountdown() {
+            const startDate = new Date(dataReferenciaStr + "T00:00:00"); // Garante que a data inicial seja no início do dia
+            const now = new Date();
+
+            let diffMs = now.getTime() - startDate.getTime(); // Diferença total em milissegundos
+
+            const isFutureDate = diffMs < 0;
+            diffMs = Math.abs(diffMs); // Trabalha com valor absoluto para o cálculo dos componentes
+
+            let totalSeconds = Math.floor(diffMs / 1000);
+
+            // Calcula os componentes de tempo
+            let seconds = totalSeconds % 60;
+            let totalMinutes = Math.floor(totalSeconds / 60);
+            let minutes = totalMinutes % 60;
+            let totalHours = Math.floor(totalMinutes / 60);
+            let hours = totalHours % 24;
+            let totalDays = Math.floor(totalHours / 24);
+
+            let years = 0;
+            let months = 0;
+            let days = totalDays; // Começa com os dias totais e subtrai anos/meses
+
+            // Lógica para calcular anos e meses (aproximada devido à variação de dias em meses/anos)
+            if (totalDays >= 365) { // Usamos 365 para anos inteiros
+                years = Math.floor(totalDays / 365.25); // Contabiliza anos bissextos em média
+                days = totalDays % 365.25;
+            }
+            if (days >= 30) { // Usamos 30 para meses inteiros
+                months = Math.floor(days / 30.44); // Contabiliza variação de dias em meses em média
+                days = days % 30.44;
+            }
+            days = Math.floor(days); // Garante que dias seja um número inteiro
+
+            // Exibe a mensagem principal e os componentes de tempo
+            document.getElementById('mensagem-especial').innerText = suaMensagem;
+
+            const yearsEl = document.getElementById('years');
+            const monthsEl = document.getElementById('months');
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+
+            const yearsUnitEl = document.getElementById('years-unit');
+            const monthsUnitEl = document.getElementById('months-unit');
+
+
+            // Atualiza os elementos HTML
+            yearsEl.innerText = formatNumber(years);
+            monthsEl.innerText = formatNumber(months);
+            daysEl.innerText = formatNumber(days);
+            hoursEl.innerText = formatNumber(hours);
+            minutesEl.innerText = formatNumber(minutes);
+            secondsEl.innerText = formatNumber(seconds);
+
+            // Ajusta os rótulos (plural/singular)
+            yearsEl.nextElementSibling.innerText = years === 1 ? 'ano' : 'anos';
+            monthsEl.nextElementSibling.innerText = months === 1 ? 'mês' : 'meses';
+            daysEl.nextElementSibling.innerText = days === 1 ? 'dia' : 'dias';
+            hoursEl.nextElementSibling.innerText = hours === 1 ? 'hora' : 'horas';
+            minutesEl.nextElementSibling.innerText = minutes === 1 ? 'minuto' : 'minutos';
+            secondsEl.nextElementSibling.innerText = seconds === 1 ? 'segundo' : 'segundos';
+
+
+            // Mensagem de "há X dias" ou "faltam X dias"
+            let introMessage = "";
+            // Mostra ou esconde anos/meses se for 0
+            if (years === 0 && months === 0) {
+                 yearsUnitEl.style.display = 'none';
+                 monthsUnitEl.style.display = 'none';
+            } else {
+                 yearsUnitEl.style.display = 'block';
+                 monthsUnitEl.style.display = 'block';
+            }
+
+
+            if (isFutureDate) {
+                // Se a data de referência for no futuro
+                if (totalDays === 0 && hours === 0 && minutes === 0 && seconds === 0 && years === 0 && months === 0) {
+                    introMessage = "Hoje é a nossa data especial! Um dia inesquecível!";
+                    document.getElementById('contagem-dias').innerText = introMessage; // Sobrescreve tudo
+                    document.querySelector('.countdown-container').style.display = 'none'; // Esconde a contagem se for o dia exato
+                } else {
+                    introMessage = "Faltam ";
+                    document.querySelector('.countdown-container').style.display = 'flex';
+                }
+            } else {
+                // Se a data de referência for no passado
+                introMessage = "Estamos juntos há ";
+                document.querySelector('.countdown-container').style.display = 'flex';
+            }
+            document.getElementById('contagem-dias').innerText = introMessage + "Te amo mais a cada dia!"; // Este P é apenas um marcador
+        }
+
+        // Chama a função pela primeira vez e depois a cada segundo
+        updateCountdown();
+        setInterval(updateCountdown, 1000); // Atualiza a cada 1000 milissegundos (1 segundo)
+    </script>
+</body>
+</html>
