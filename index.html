@@ -17,16 +17,18 @@
             color: #333;
             text-align: center;
             line-height: 1.6;
-            overflow: hidden; /* Evita barras de rolagem desnecessárias */
+            overflow-x: hidden; /* Evita rolagem horizontal */
         }
         .container {
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.45); /* Agora com transparência */
             padding: 30px 40px;
             border-radius: 15px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             max-width: 600px;
             margin: 20px;
             animation: fadeIn 2s ease-out; /* Animação de entrada */
+            position: relative; /* Para posicionar o slideshow */
+            z-index: 1; /* Garante que o conteúdo fique acima do slideshow se houver sobreposição */
         }
         h1 {
             color: #d147a3; /* Um tom de rosa mais escuro */
@@ -38,6 +40,38 @@
             font-size: 1.2em;
             margin-bottom: 15px;
         }
+        #mensagem-especial { /* Estilo para a mensagem principal */
+            color: #d147a3; /* Exemplo: um tom de roxo para a mensagem especial */
+            font-weight: bold; /* Opcional: para deixar o texto em negrito */
+            text-shadow: -1px -1px 0 #000,  /* Sombra superior esquerda */
+                     1px -1px 0 #000,   /* Sombra superior direita */
+                     -1px 1px 0 #000,   /* Sombra inferior esquerda */
+                     1px 1px 0 #000;    /* Sombra inferior direita */
+        /* Você pode ajustar a cor do contorno aqui (#000 é preto).
+           Para um contorno branco, use #FFF. */
+        }
+        
+        /* Estilo para a cor do texto da contagem dinâmica */
+        #contagem-dias {
+            color: #e91e63 !important; /* Cor rosa vibrante. Use !important para garantir que se sobreponha ao estilo inline. */
+            font-weight: bold; /* Deixar em negrito, por exemplo */
+            font-size: 1.25em; /* Ligeiramente maior para destacar */
+            text-shadow: -1px -1px 0 #000,  /* Sombra superior esquerda */
+                     1px -1px 0 #000,   /* Sombra superior direita */
+                     -1px 1px 0 #000,   /* Sombra inferior esquerda */
+                     1px 1px 0 #000;    /* Sombra inferior direita */
+        /* Você pode ajustar a cor do contorno aqui (#000 é preto).
+           Para um contorno branco, use #FFF. */
+        }
+
+        /* Estilo para a cor do texto da assinatura */
+        #assinatura {
+            color: #d147a3; /* Você pode usar a mesma cor do título ou outra de sua preferência */
+            font-size: 0.9em; /* Mantém o tamanho original, mas agora no CSS */
+            margin-top: 30px; /* Mantém a margem original, mas agora no CSS */
+            font-weight: bold; /* Opcional: para destacar a assinatura */
+        }
+
         .countdown-container {
             margin-top: 25px;
             margin-bottom: 25px;
@@ -79,6 +113,45 @@
             100% { transform: scale(1); }
         }
 
+        /* Estilos do Slideshow */
+        .slideshow-container {
+            position: absolute; /* Posiciona o slideshow atrás do conteúdo principal */
+            top: 50%; /* Centraliza verticalmente */
+            left: 50%; /* Centraliza horizontalmente */
+            transform: translate(-50%, -50%); /* Ajusta para centralizar exatamente */
+            
+            /* Diminuir o tamanho do carrossel e arredondar os cantos */
+            width: 70vw; /* Diminui a largura para 70% da viewport */
+            max-width: 800px; /* Limita a largura máxima */
+            height: 50vh; /* Diminui a altura para 50% da viewport */
+            max-height: 450px; /* Limita a altura máxima */
+            
+            overflow: hidden;
+            z-index: 0; /* Garante que fique no fundo */
+            
+            /* Arredondar os cantos do container do slideshow */
+            border-radius: 20px; /* Cantos arredondados */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Adiciona uma sombra para destaque */
+        }
+        .slideshow-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Cobre o container, cortando se necessário (comportamento original) */
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0; /* Inicialmente invisível */
+            transition: opacity 1.5s ease-in-out; /* Transição suave */
+            filter: brightness(0.7) blur(2px); /* Mantive os valores originais para um fundo mais suave */
+            transform: scale(1.05); /* Pequeno zoom para preencher melhor */
+            
+            /* Arredondar os cantos das imagens (importante para consistência) */
+            border-radius: 20px; /* Mesmo valor do container */
+        }
+        .slideshow-image.active {
+            opacity: 1; /* Ativa a imagem */
+        }
+
         /* Estilo para telas menores */
         @media (max-width: 768px) {
             .container {
@@ -95,14 +168,28 @@
                 min-width: 60px;
                 padding: 8px 12px;
             }
+            .slideshow-container {
+                width: 90vw; /* Ocupa mais espaço em telas pequenas */
+                height: 45vh; /* Altura ajustada */
+                border-radius: 15px; /* Menos arredondado em telas pequenas, se preferir */
+            }
+            .slideshow-image {
+                border-radius: 15px; /* Correspondente ao container em telas pequenas */
+            }
         }
     </style>
 </head>
 <body>
+    <div class="slideshow-container">
+        </div>
+
     <div class="container">
         <span class="heart">❤️</span>
         <h1>Para Rayssa, Com Todo Amor!</h1>
         <p id="mensagem-especial">
+            </p>
+
+        <p id="contagem-dias"> 
             </p>
 
         <div class="countdown-container">
@@ -132,8 +219,8 @@
             </div>
         </div>
 
-        <p style="margin-top: 30px; font-size: 0.9em; color: #666;">
-            Com carinho, do seu amor, Renan!.
+        <p id="assinatura" style="margin-top: 30px; font-size: 0.9em;">
+            Com carinho, do seu amor, Renan!
         </p>
         <span class="heart">❤️</span>
     </div>
@@ -142,52 +229,88 @@
         // --- CONFIGURAÇÕES DA PÁGINA (JavaScript) ---
 
         // A data de referência para a contagem (AAAA-MM-DD)
-        // *** MANTENHA ESTA DATA EXATAMENTE IGUAL À DO SEU CÓDIGO PYTHON (2024-09-26) ***
-        const dataReferenciaStr = "2018-05-06"; 
+        const dataReferenciaStr = "2025-01-01"; // DATA FIXA: 1 de Janeiro de 2025
 
-        // Sua mensagem especial (aqui no JavaScript)
-        const suaMensagem = "Sou um homem de sorte por ter você como minha esposa! Desde que te conheci a minha vida ficou muito melhor e mais feliz. Conte comigo, meu amor, pois estou aqui para ser a sua rocha, o seu porto seguro, o seu apoio nos dias difíceis. Você é um presente de Deus que valorizo todos os dias!";
+        // Sua mensagem especial para a pessoa amada
+        const suaMensagem = "Sou um homem de sorte por ter você como minha esposa! Desde que te conheci a minha vida ficou muito melhor e mais feliz. Conte comigo, meu amor, pois estou aqui para ser a sua rocha, o seu porto seguro, o seu apoio nos dias difíceis. Você é um presente de Deus que valorizo todos os dias! ";
+
+        // --- CONFIGURAÇÕES DO SLIDESHOW ---
+        const images = [
+            "foto_renan_1.jpeg",
+            "foto_renan_2.jpeg",
+            "foto_renan_3.jpeg",
+            "foto_renan_4.jpeg",
+            "foto_renan_5.jpeg",
+        ];
+        const slideshowIntervalTime = 5000; // 5 segundos por padrão
 
         // --- LÓGICA DE CÁLCULO E EXIBIÇÃO EM TEMPO REAL ---
 
-        // Função para formatar números com zero à esquerda (ex: 5 -> 05)
         const formatNumber = (num) => num < 10 ? '0' + num : num;
 
         function updateCountdown() {
-            const startDate = new Date(dataReferenciaStr + "T00:00:00"); // Garante que a data inicial seja no início do dia
+            const startDate = new Date(dataReferenciaStr + "T00:00:00"); 
             const now = new Date();
 
-            let diffMs = now.getTime() - startDate.getTime(); // Diferença total em milissegundos
-
+            let diffMs = now.getTime() - startDate.getTime(); 
             const isFutureDate = diffMs < 0;
-            diffMs = Math.abs(diffMs); // Trabalha com valor absoluto para o cálculo dos componentes
+            diffMs = Math.abs(diffMs);
 
-            let totalSeconds = Math.floor(diffMs / 1000);
-
-            // Calcula os componentes de tempo
-            let seconds = totalSeconds % 60;
-            let totalMinutes = Math.floor(totalSeconds / 60);
-            let minutes = totalMinutes % 60;
-            let totalHours = Math.floor(totalMinutes / 60);
-            let hours = totalHours % 24;
-            let totalDays = Math.floor(totalHours / 24);
-
+            let seconds = Math.floor((diffMs / 1000) % 60);
+            let minutes = Math.floor((diffMs / (1000 * 60)) % 60);
+            let hours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
+            
             let years = 0;
             let months = 0;
-            let days = totalDays; // Começa com os dias totais e subtrai anos/meses
+            let days = 0;
 
-            // Lógica para calcular anos e meses (aproximada devido à variação de dias em meses/anos)
-            if (totalDays >= 365) { // Usamos 365 para anos inteiros
-                years = Math.floor(totalDays / 365.25); // Contabiliza anos bissextos em média
-                days = totalDays % 365.25;
-            }
-            if (days >= 30) { // Usamos 30 para meses inteiros
-                months = Math.floor(days / 30.44); // Contabiliza variação de dias em meses em média
-                days = days % 30.44;
-            }
-            days = Math.floor(days); // Garante que dias seja um número inteiro
+            if (!isFutureDate) { 
+                let tempCurrent = new Date(startDate); 
+                while (tempCurrent.getFullYear() < now.getFullYear() ||
+                       (tempCurrent.getFullYear() === now.getFullYear() && tempCurrent.getMonth() < now.getMonth()) ||
+                       (tempCurrent.getFullYear() === now.getFullYear() && tempCurrent.getMonth() === now.getMonth() && tempCurrent.getDate() <= now.getDate())) {
+                    let nextYearCandidate = new Date(tempCurrent);
+                    nextYearCandidate.setFullYear(tempCurrent.getFullYear() + 1);
+                    if (nextYearCandidate.getTime() <= now.getTime()) {
+                        years++;
+                        tempCurrent = nextYearCandidate;
+                    } else { break; }
+                }
+                while (tempCurrent.getMonth() < now.getMonth() ||
+                       (tempCurrent.getMonth() === now.getMonth() && tempCurrent.getDate() <= now.getDate())) {
+                    let nextMonthCandidate = new Date(tempCurrent);
+                    nextMonthCandidate.setMonth(tempCurrent.getMonth() + 1);
+                    if (nextMonthCandidate.getTime() <= now.getTime()) {
+                        months++;
+                        tempCurrent = nextMonthCandidate;
+                    } else { break; }
+                }
+                days = Math.floor((now.getTime() - tempCurrent.getTime()) / (1000 * 60 * 60 * 24));
 
-            // Exibe a mensagem principal e os componentes de tempo
+            } else { 
+                let tempCurrent = new Date(now); 
+                while (tempCurrent.getFullYear() < startDate.getFullYear() ||
+                       (tempCurrent.getFullYear() === startDate.getFullYear() && tempCurrent.getMonth() < startDate.getMonth()) ||
+                       (tempCurrent.getFullYear() === startDate.getFullYear() && tempCurrent.getMonth() === startDate.getMonth() && tempCurrent.getDate() <= startDate.getDate())) {
+                    let nextYearCandidate = new Date(tempCurrent);
+                    nextYearCandidate.setFullYear(tempCurrent.getFullYear() + 1);
+                    if (nextYearCandidate.getTime() <= startDate.getTime()) {
+                        years++;
+                        tempCurrent = nextYearCandidate;
+                    } else { break; }
+                }
+                while (tempCurrent.getMonth() < startDate.getMonth() ||
+                       (tempCurrent.getMonth() === startDate.getMonth() && tempCurrent.getDate() <= startDate.getDate())) {
+                    let nextMonthCandidate = new Date(tempCurrent);
+                    nextMonthCandidate.setMonth(tempCurrent.getMonth() + 1);
+                    if (nextMonthCandidate.getTime() <= startDate.getTime()) {
+                        months++;
+                        tempCurrent = nextMonthCandidate;
+                    } else { break; }
+                }
+                days = Math.floor((startDate.getTime() - tempCurrent.getTime()) / (1000 * 60 * 60 * 24));
+            }
+
             document.getElementById('mensagem-especial').innerText = suaMensagem;
 
             const yearsEl = document.getElementById('years');
@@ -201,7 +324,6 @@
             const monthsUnitEl = document.getElementById('months-unit');
 
 
-            // Atualiza os elementos HTML
             yearsEl.innerText = formatNumber(years);
             monthsEl.innerText = formatNumber(months);
             daysEl.innerText = formatNumber(days);
@@ -209,7 +331,6 @@
             minutesEl.innerText = formatNumber(minutes);
             secondsEl.innerText = formatNumber(seconds);
 
-            // Ajusta os rótulos (plural/singular)
             yearsEl.nextElementSibling.innerText = years === 1 ? 'ano' : 'anos';
             monthsEl.nextElementSibling.innerText = months === 1 ? 'mês' : 'meses';
             daysEl.nextElementSibling.innerText = days === 1 ? 'dia' : 'dias';
@@ -218,39 +339,122 @@
             secondsEl.nextElementSibling.innerText = seconds === 1 ? 'segundo' : 'segundos';
 
 
-            // Mensagem de "há X dias" ou "faltam X dias"
-            let introMessage = "";
-            // Mostra ou esconde anos/meses se for 0
-            if (years === 0 && months === 0) {
-                 yearsUnitEl.style.display = 'none';
-                 monthsUnitEl.style.display = 'none';
-            } else {
-                 yearsUnitEl.style.display = 'block';
-                 monthsUnitEl.style.display = 'block';
-            }
+            let contagemTexto = "";
+            let mensagemFinal = "";
 
+            const isExactDate = (now.getFullYear() === startDate.getFullYear() &&
+                                 now.getMonth() === startDate.getMonth() &&
+                                 now.getDate() === startDate.getDate());
 
-            if (isFutureDate) {
-                // Se a data de referência for no futuro
-                if (totalDays === 0 && hours === 0 && minutes === 0 && seconds === 0 && years === 0 && months === 0) {
-                    introMessage = "Hoje é a nossa data especial! Um dia inesquecível!";
-                    document.getElementById('contagem-dias').innerText = introMessage; // Sobrescreve tudo
-                    document.querySelector('.countdown-container').style.display = 'none'; // Esconde a contagem se for o dia exato
+            // Esta lógica decide qual mensagem de tempo exibir e se o contador deve aparecer
+            if (isFutureDate) { // Se a data de referência (2025-01-01) é no futuro em relação à data atual (ela não é, então este bloco não deve ser executado no momento)
+                if (isExactDate && (hours + minutes + seconds === 0)) {
+                    mensagemFinal = "Hoje é a nossa data especial! Um dia inesquecível!";
+                    document.querySelector('.countdown-container').style.display = 'none'; // Esconde o contador
                 } else {
-                    introMessage = "Faltam ";
-                    document.querySelector('.countdown-container').style.display = 'flex';
+                    if (years > 0) { contagemTexto += years + (years === 1 ? ' ano' : ' anos'); if (months > 0 && days > 0) contagemTexto += ", "; else if (months > 0 || days > 0) contagemTexto += " e "; }
+                    if (months > 0) { contagemTexto += months + (months === 1 ? ' mês' : ' meses'); if (days > 0) contagemTexto += " e "; }
+                    if (days > 0 || (years === 0 && months === 0 && (hours > 0 || minutes > 0 || seconds > 0))) { contagemTexto += days + (days === 1 ? ' dia' : ' dias'); } else if (years === 0 && months === 0 && days === 0) { contagemTexto += ""; }
+                    mensagemFinal = "Faltam " + contagemTexto + "!";
+                    document.querySelector('.countdown-container').style.display = 'flex'; // Mostra o contador
                 }
-            } else {
-                // Se a data de referência for no passado
-                introMessage = "Estamos juntos há ";
-                document.querySelector('.countdown-container').style.display = 'flex';
+            } else { // Este bloco é executado porque 2025-01-01 é no passado em relação à data atual
+                if (years > 0) { contagemTexto += years + (years === 1 ? ' ano' : ' anos'); if (months > 0 && days > 0) contagemTexto += ", "; else if (months > 0 || days > 0) contagemTexto += " e "; }
+                if (months > 0) { contagemTexto += months + (months === 1 ? ' mês' : ' meses'); if (days > 0) contagemTexto += " e "; }
+                if (days > 0 || (years === 0 && months === 0 && (hours > 0 || minutes > 0 || seconds > 0))) { contagemTexto += days + (days === 1 ? ' dia' : ' dias'); } else if (years === 0 && months === 0 && days === 0) { contagemTexto += ""; }
+               
+                mensagemFinal = "Estamos juntos há " + contagemTexto + ". Meu amor cresce a cada dia!";
+                document.querySelector('.countdown-container').style.display = 'flex'; // GARANTIDO: o contador é exibido aqui
             }
-            document.getElementById('contagem-dias').innerText = introMessage + "Te amo mais a cada dia!"; // Este P é apenas um marcador
+            
+            document.getElementById('contagem-dias').innerText = mensagemFinal; 
+
+            // Gerencia a visibilidade das unidades de tempo (anos, meses, dias)
+            // Esta parte mostra ou esconde as caixinhas individuais com base nos valores
+            if (isExactDate && (hours + minutes + seconds === 0)) { // Esta condição só é verdadeira na data exata
+                yearsUnitEl.style.display = 'none';
+                monthsUnitEl.style.display = 'none';
+                daysEl.parentElement.style.display = 'none';
+                hoursEl.parentElement.style.display = 'none';
+                minutesEl.parentElement.style.display = 'none';
+                secondsEl.parentElement.style.display = 'none';
+            } else { // Para todas as outras datas (que é o caso agora)
+                // Certifica-se de que o container principal esteja visível
+                document.querySelector('.countdown-container').style.display = 'flex';
+                // E então ajusta a visibilidade das unidades individuais
+                yearsUnitEl.style.display = (years > 0) ? 'flex' : 'none';
+                monthsUnitEl.style.display = (months > 0 || years > 0) ? 'flex' : 'none';
+                daysEl.parentElement.style.display = 'flex'; 
+                hoursEl.parentElement.style.display = 'flex';
+                minutesEl.parentElement.style.display = 'flex';
+                secondsEl.parentElement.style.display = 'flex';
+            }
+
+            // Para depuração: Verifique isso no console do seu navegador (F12)
+            console.log("updateCountdown executado. Mensagem: ", mensagemFinal);
+            console.log("Contador visível?", document.querySelector('.countdown-container').style.display);
+            console.log(`Anos: ${years}, Meses: ${months}, Dias: ${days}, Horas: ${hours}, Minutos: ${minutes}, Segundos: ${seconds}`);
+
         }
 
-        // Chama a função pela primeira vez e depois a cada segundo
-        updateCountdown();
-        setInterval(updateCountdown, 1000); // Atualiza a cada 1000 milissegundos (1 segundo)
+        // --- Lógica do Slideshow ---
+        let slideIndex = 0;
+        let slideshowImages = []; 
+
+        function showSlides() {
+            if (slideshowImages.length === 0) return;
+            for (let i = 0; i < slideshowImages.length; i++) {
+                slideshowImages[i].classList.remove('active');
+            }
+            slideshowImages[slideIndex].classList.add('active');
+            
+            slideIndex++;
+            if (slideIndex >= slideshowImages.length) {
+                slideIndex = 0;
+            }
+        }
+
+        function initializeSlideshow() {
+            const slideshowContainer = document.querySelector('.slideshow-container');
+            if (!slideshowContainer) {
+                console.error("Erro: Elemento .slideshow-container não encontrado.");
+                return;
+            }
+            slideshowContainer.innerHTML = '';
+            slideshowImages = []; 
+
+            images.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src; 
+                img.classList.add('slideshow-image'); 
+                img.onerror = () => {
+                    console.error(`Erro ao carregar imagem: ${src}. Verifique o nome e o caminho do arquivo.`);
+                };
+                slideshowContainer.appendChild(img);
+                slideshowImages.push(img);
+            });
+
+            if (slideshowImages.length > 0) {
+                showSlides(); 
+                if (window.slideshowIntervalId) {
+                    clearInterval(window.slideshowIntervalId);
+                }
+                window.slideshowIntervalId = setInterval(showSlides, slideshowIntervalTime);
+            } else {
+                console.warn("Nenhuma imagem configurada para o slideshow. Verifique a array 'images'.");
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOM completamente carregado. Iniciando scripts.");
+            initializeSlideshow(); 
+            updateCountdown(); 
+            if (window.countdownIntervalId) {
+                clearInterval(window.countdownIntervalId);
+            }
+            window.countdownIntervalId = setInterval(updateCountdown, 1000); 
+            console.log("Scripts de contagem e slideshow iniciados.");
+        });
     </script>
 </body>
 </html>
